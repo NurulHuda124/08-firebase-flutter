@@ -1,10 +1,11 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:flutter/material.dart';
 import 'package:firebase/auth.dart';
+import 'package:firebase/home_screen.dart';
+import 'package:firebase/register_page.dart';
+import 'package:flutter/material.dart';
 import 'package:firebase/sign_in.dart';
 import 'package:firebase/first_screen.dart';
-import 'package:firebase/home_screen.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -16,6 +17,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController(text: "");
   TextEditingController passwordController = TextEditingController(text: "");
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,20 +63,6 @@ class _LoginPageState extends State<LoginPage> {
             ),
             Container(
               alignment: Alignment.center,
-              margin: const EdgeInsets.only(
-                  left: 30, right: 30, top: 3, bottom: 15),
-              child: TextFormField(
-                decoration: InputDecoration(
-                  labelText: "Confirm Password",
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0)),
-                ),
-                controller: passwordController,
-                obscureText: true,
-              ),
-            ),
-            Container(
-              alignment: Alignment.center,
               margin: const EdgeInsets.only(left: 30, right: 30, bottom: 10),
               child: ElevatedButton(
                   child: const Text(
@@ -92,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   onPressed: () async {
-                    await signIn(emailController.text, passwordController.text)
+                    signIn(emailController.text, passwordController.text)
                         .then((result) {
                       if (result == null) {
                         Navigator.pushReplacement(
@@ -101,45 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                                 builder: (context) => HomeScreen(
                                       email: emailController.text,
                                     )));
-                      } else {
-                        Scaffold.of(context).showSnackBar(SnackBar(
-                          content: Text(
-                            result,
-                            style: const TextStyle(fontSize: 16),
-                          ),
-                        ));
-                      }
-                    });
-                  }),
-            ),
-            Container(
-              alignment: Alignment.center,
-              margin: const EdgeInsets.only(left: 30, right: 30, bottom: 10),
-              child: ElevatedButton(
-                  child: const Text(
-                    "Sign Up",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.blue,
-                    minimumSize: const Size(double.infinity, 50),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40),
-                    ),
-                  ),
-                  onPressed: () async {
-                    signUp(emailController.text, passwordController.text)
-                        .then((result) {
-                      if (result == null) {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => HomeScreen(
-                                      email: emailController.text,
-                                    )));
+                        // ignore: duplicate_ignore
                       } else {
                         Scaffold.of(context).showSnackBar(SnackBar(
                           content: Text(
@@ -173,6 +123,38 @@ class _LoginPageState extends State<LoginPage> {
             ),
             const SizedBox(height: 20),
             _signInButton(),
+            const SizedBox(height: 130),
+            Container(
+              alignment: Alignment.bottomCenter,
+              margin: const EdgeInsets.only(bottom: 20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  const Text(
+                    'Don’t have account ?',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 17,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const RegisterPage()));
+                    },
+                    child: const Text(
+                      'Register here',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 17,
+                          fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ]),
@@ -181,7 +163,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _signInButton() {
     return RaisedButton(
-      color: Colors.blueGrey,
+      color: Colors.lightBlue,
       onPressed: () {
         signInWithGoogle().then((result) {
           if (result != null) {
