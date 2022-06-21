@@ -22,3 +22,6 @@ Kelas : MI-2C <br>
 <span>
     <img src="assets/5.png" width="300">
 </span>
+<span>
+    <img src="assets/6.png" width="600">
+</span>
